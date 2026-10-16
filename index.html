@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-    <h3 class="text-lg font-bold" dir="ltr">中国上海跳旦大学：学生你好，由于您在高考中取得了 678 分的优异成绩，你已被我校破格录取，请于 2026 年 9 月 1 日到我校报道，欢迎！</h3>
-  </body>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>单向历</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #fff; }
+    body { display: flex; justify-content: center; align-items: flex-start; }
+    img { display: block; width: 100%; height: auto; max-width: 100%; }
+  </style>
+</head>
+<body>
+  <img id="calendar" alt="">
+  <script>
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Shanghai",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(new Date());
+    const date = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    const year = date.year;
+    const monthDay = date.month + date.day;
+    const image = document.getElementById("calendar");
+    image.src = `https://img.owspace.com/Public/uploads/Download/${year}/${monthDay}.jpg`;
+  </script>
+</body>
 </html>
