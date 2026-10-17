@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F4F0E7"
-    android:padding="4dp">
+    android:background="#F4F0E7">
 
     <ImageView
         android:id="@+id/calendar_image"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
+        android:layout_height="match_parent"
         android:contentDescription="@string/widget_image_description"
         android:scaleType="fitCenter"
         android:background="#F4F0E7" />
 
     <TextView
         android:id="@+id/widget_footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:paddingBottom="3dp"
-        android:text="@string/widget_loading"
-        android:textColor="#665F55"
-        android:textSize="10sp"
-        android:maxLines="1"
-        android:ellipsize="end" />
-</LinearLayout>
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        android:text="@string/widget_loading" />
+</FrameLayout>
