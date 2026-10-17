@@ -147,7 +147,7 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
         bounds.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(file.getAbsolutePath(), bounds);
         int sample = 1;
-        while (bounds.outWidth / sample > 500 || bounds.outHeight / sample > 800) {
+        while (bounds.outWidth / sample > 1000 || bounds.outHeight / sample > 1600) {
             sample *= 2;
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -161,7 +161,7 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
         bounds.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, bounds);
         int sample = 1;
-        while (bounds.outWidth / sample > 500 || bounds.outHeight / sample > 800) {
+        while (bounds.outWidth / sample > 1000 || bounds.outHeight / sample > 1600) {
             sample *= 2;
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
