@@ -2,6 +2,12 @@ plugins {
     id 'com.android.application'
 }
 
+def signingStoreFile = System.getenv("SIGNING_KEYSTORE_FILE")
+def signingStorePassword = System.getenv("SIGNING_KEYSTORE_PASSWORD")
+def signingKeyAlias = System.getenv("SIGNING_KEY_ALIAS")
+def signingKeyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+def hasReleaseSigning = signingStoreFile && signingStorePassword && signingKeyAlias && signingKeyPassword
+
 android {
     namespace 'com.icetea.singlecalendar'
     compileSdk 35
@@ -19,6 +25,17 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(signingStoreFile)
+                storePassword signingStorePassword
+                keyAlias signingKeyAlias
+                keyPassword signingKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ''
@@ -26,6 +43,9 @@ android {
         }
         release {
             minifyEnabled false
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
