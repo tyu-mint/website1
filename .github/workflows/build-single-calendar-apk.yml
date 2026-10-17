@@ -29,12 +29,30 @@ jobs:
         with:
           gradle-version: "8.9"
 
-      - name: Build debug APK
+      - name: Decode release signing keystore
+        env:
+          SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$SIGNING_KEYSTORE_BASE64" ]; then
+            echo "::error::Add SIGNING_KEYSTORE_BASE64 and the other signing secrets in GitHub Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          echo "$SIGNING_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/single-calendar-release.jks"
+          echo "SIGNING_KEYSTORE_FILE=$RUNNER_TEMP/single-calendar-release.jks" >> "$GITHUB_ENV"
+
+      - name: Build signed release APK
         working-directory: android-widget
-        run: gradle --no-daemon assembleDebug
+        env:
+          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: gradle --no-daemon assembleRelease
 
       - name: Prepare APK
-        run: cp android-widget/app/build/outputs/apk/debug/app-debug.apk SingleCalendarWidget.apk
+        run: cp android-widget/app/build/outputs/apk/release/app-release.apk SingleCalendarWidget.apk
+
+      - name: Verify APK signature
+        run: jarsigner -verify -verbose -certs SingleCalendarWidget.apk
 
       - name: Upload APK build artifact
         uses: actions/upload-artifact@v4
@@ -50,7 +68,8 @@ jobs:
           name: 单向历小组件 v1.0.${{ github.run_number }}
           body: |
             单向历安卓桌面小组件，适配 Android / HyperOS。
-            
+
+            - 使用固定 Release 签名，支持同签名版本覆盖更新
             - 按北京时间每日更新
             - 点击小组件可手动刷新
             - 网络失败时保留上次成功图片
