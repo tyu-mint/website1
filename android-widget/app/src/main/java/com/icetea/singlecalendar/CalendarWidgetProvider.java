@@ -143,7 +143,17 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
 
     private static Bitmap decodeBitmap(File file) {
         if (!file.exists()) return null;
-        return BitmapFactory.decodeFile(file.getAbsolutePath());
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), bounds);
+        int sample = 1;
+        while (bounds.outWidth / sample > 500 || bounds.outHeight / sample > 800) {
+            sample *= 2;
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sample;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
     }
 
     private static Bitmap decodeBitmap(byte[] bytes) {
@@ -151,7 +161,7 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
         bounds.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, bounds);
         int sample = 1;
-        while (bounds.outWidth / sample > 1400 || bounds.outHeight / sample > 2000) {
+        while (bounds.outWidth / sample > 500 || bounds.outHeight / sample > 800) {
             sample *= 2;
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
