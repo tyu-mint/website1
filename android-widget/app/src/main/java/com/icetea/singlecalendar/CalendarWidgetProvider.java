@@ -180,8 +180,12 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
     private static void updateFooter(Context context, String footer) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         ComponentName component = new ComponentName(context, CalendarWidgetProvider.class);
+        Bitmap cachedBitmap = decodeBitmap(new File(context.getFilesDir(), CACHE_NAME));
         for (int id : manager.getAppWidgetIds(component)) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.calendar_widget);
+            if (cachedBitmap != null) {
+                views.setImageViewBitmap(R.id.calendar_image, cachedBitmap);
+            }
             views.setTextViewText(R.id.widget_footer, footer);
             PendingIntent click = PendingIntent.getBroadcast(
                     context, 1002,
